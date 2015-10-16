@@ -1,0 +1,26 @@
+<hitis>
+	<!--
+	a
+	b
+	c
+	-->
+	<sql id="TB_A_SELECT">
+		SELECT ID, NAME, CREATE_TIME
+		FROM TB_A
+		WHERE 1 = 1
+		<null key="id">
+			and id = 123
+		</null>
+		<notempty key="name">
+        	and name = ?
+        </notempty>
+        and age = #{age}
+        and email = #{email}
+        <notnull key="address">
+            and address = ?
+        </notnull>
+        <ls key="idsAry">
+            and ids in (?)
+        </ls>
+	</sql>
+</hitis>

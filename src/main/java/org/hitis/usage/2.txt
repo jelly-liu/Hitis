@@ -1,0 +1,36 @@
+2:put the 1.xml to the any package, such as: "com.manager.hitis"
+	note:the hitis file can be any type, such as txt, html, xml
+	the content can include any []special character]], such as:
+	<ne key="create_time"> and create_time >= to_char(?, 'yyyy-mm-dd') </ne>
+	you do not need change < to &lt;
+-----------------------------------------------------------------------------------------------------
+2:config in spring_x.xml
+	(1)hitisPackageLocation, which contents all hitis files, sub package and file will be scaned
+		like com.manager.hitis, / will be also ok
+	(2)encoding, which will be used when reading hitis file content, default value is UTF-8
+	(3)init-method="init", which must be asined in spring bean config
+	----------------------- example -----------------------
+	<!-- hitis config -->
+	<bean id="hitisFactory" class="org.hitis.HitisFactory" init-method="init">
+		<property name="encoding" value="UTF-8"/>
+		<property name="hitisPackagePath" value="com.manager.hitis"/>
+		<property name="hitisFilePathList">
+			<list>
+				<value>hitis_file_a.txt</value>
+				<value>hitis_file_b.txt</value>
+				<value>hitis_file_c.txt</value>
+			</list>
+		</property>
+	</bean>
+-----------------------------------------------------------------------------------------------------
+2:you can alse use the "org.hitis.HitisFactory" in any where, for example
+	List<String> hitisFileNameList = new ArrayList<String>();
+	hitisFileNameList.add("hitis_file_a.txt");
+	hitisFileNameList.add("hitis_file_b.txt");
+	hitisFileNameList.add("hitis_file_c.txt");
+
+	HitisFactory hitisFactory = new HitisFactory();
+	hitisFactory.setEncode("UTF-8");
+	hitisFactory.setHitisPackagePath("/com/manager/hitis/");
+	hitisFactory.setHitisFilePathList(hitisFileNameList);
+	hitisFactory.init();

@@ -1,0 +1,90 @@
+<hitis>
+	<!--
+		all logic tag name as follows
+		=============================
+		<null/>
+		<notnull/>
+		<empty/>
+		<notempty/>
+		<eq/>---equal
+		<ne/>---not equal
+		<le/>---less equal
+		<ge/>---greater equal
+		<lt/>---less than
+		<gt/>---greater than
+		<ls/>---list
+	-->
+	<sql id="query1">
+		select
+		id, name, email, sex, age, qq, msn, points create_time
+		from userinfo
+		where 1 = 1
+		<null key="id">
+			and id = ?
+		</null>
+		<notnull key="id">
+			and id = ?
+		</notnull>
+		
+		<empty key="name">
+			and instr(name, ?) > 0
+		</empty>
+		<notempty key="name">
+			and instr(name, ?) > 0
+		</notempty>
+		
+		<!--
+			value of compareType is "number" or "string"
+			[value of key] is equal than [value of compareValue] ? return sql : return "";
+		-->
+		<eq key="sex" compareValue="0" compareType="number">
+			and sex = ?
+		</eq>
+		<ne key="sex" compareValue="0" compareType="string">
+			and sex = ?
+		</ne>
+		
+		<!--
+			[value of key] is less than [value of compareValue] ? return sql : return "";
+		-->
+		<le key="points" compareValue="100" compareType="number">
+			and id = ?
+		</le>
+		<lt key="points" compareValue="100" compareType="string">
+			and id = ?
+		</lt>
+		
+		<!--
+			[value of key] is greater than [value of compareValue] ? return sql : return "";
+		-->
+		<ge key="points" compareValue="100" compareType="number">
+			and id = ?
+		</ge>
+		<gt key="points" compareValue="100" compareType="string">
+			and id = ?
+		</gt>
+		
+		<!--
+			element of List or Array must be one of:
+			"Integer", "Long", "Double", "Float", "String"
+			
+			list example:
+			=====================================
+			List list = new ArrayList()
+			list.add(1); list.add(2); list.add(3);
+			Map paramMap = new HashMap();
+			paramMap.put("ids", list);
+
+			array example:
+			=====================================
+			paramMap.put("ids", new Integer[]{1,2,3});
+			
+			the sql:
+			xxx where 1 = 1 and id in (?) will be changed to
+			xxx where 1 = 1 and id in (?, ?, ?)
+		-->
+		<ls key="ids">
+			and id in (?)
+		</ls>
+	</sql>
+</hitis>

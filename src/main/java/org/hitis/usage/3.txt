@@ -1,0 +1,33 @@
+3:after you config HitisFactory in spring or init HitisFactory in any where, then
+you could start to use the [superpower dynamic function]
+----------------------------------------------------------------------------------------------------
+//make a paramter map
+Map<String, Object> paramMap = new HashMap<String, Object>();
+paramMap.put("id", "03");
+paramMap.put("name", "collon");
+paramMap.put("sex", "0");
+paramMap.put("points", "100");
+paramMap.put("ids", new Integer[]{1,2,3});
+
+//or you can conver a POJO to HashMap like this
+//note: it's only support getter and setter method in POJO, not support isXxx method in POJO
+User user = new User();
+user.setId(1);
+user.setName("collon");
+Map<String, Object> paramMap = HitisHelper.ChangePojoToMap(user);
+
+//this will return a sql which is jointed by the tag id, and paramMap
+SqlAndValues sqlAndValues = HitisExecuter.getSqlAndValues("TB_A_SELECT", paramMap);
+String sql = sqlAndValues.getSql();
+Object[] params = sqlAndValues.getValues();
+
+//after that, you can query an result by [Spring JdbcTemplate] or other interface, such as
+List list = new JdbcTemplate(dataSource).queryForList(sql, params);
+Map map = new JdbcTemplate(dataSource).queryForMap(sql, params);
+
+//note: after Hitis version1.1, you can user HitisUtil to change map to POJO, or you can change it by other framework
+User user = HitisExecuter.ChangeMapToPojo(map, User.class);
+
+----------------------------------------------------------------------------------------------------
+wellcome for report bugs to me[email:collonn@126.com, QQ:195358385]
+i will fix it as soon as possible, if i am not very busy

@@ -1,0 +1,136 @@
+****************************************************************************
+***Hitis
+***author collonn
+***email:collonn@126.com
+***qq:195358385
+***msn:sohuxizhu@live.cn
+****************************************************************************
+***Base Version 1.0 2011-12-24
+****************************************************************************
+***Version 1.1 2011-01-01
+1:fix some bugs in version1.0
+2:add Map to Pojo and Pojo to Map method in version1.1
+3:add a new ListNode extends LogicNode to support select * from where id in(?)
+****************************************************************************
+***Version 1.1.1 2011-01-09
+1:add a new NodeFactory to create all Nodes
+2:reconstract the framework
+	HitisNodeAbs as an new common node which contents total 4 properties:
+		sourceCode, tagStart, tagEnd and tagStartPropertyMap
+	HitisNodeAbs has 3 extended Classes:
+		IUDNode, SelectNode and LogicNode
+	LogicNode has 10 extended Classes:
+		EmptyNode, EqualNode, GreaterNode, Less, ListNode, NullNode, StaticNode
+		NotEmptyNode, NotEqualNode and NotNullNode
+****************************************************************************
+***Version 1.2 2011-01-11
+1:reconstract the framework
+	(1)delete the old Interface:HitisNode
+	(2)add a new root class:HitisNode, it's an common class that can be instanced as an common tag
+	(3)add some TemplateMethod in class:LogicNode, to reduce the amount of java code
+2:an important new feature in this version is:******[[thread-safe]]******
+	(1)i'm not used ThreadLocal in this version to ensure that:thread-safe
+	   because if you use this framework in an java project, maybe ThreadLocal is not fited
+	   plus, i worked a lot on j2ee project, so, not familiar with java project
+	(2)i'm used local method or static method to ensure that:thread-safe
+****************************************************************************
+***Version 1.2.1 2011-01-13
+1:delete the class:IUDNode
+2:change the class:ListNode
+	in old version, ListNode return a replaced sql, an serious problem will be happen:[[SQL INJECTION]]
+	in new version, all sql will be used placeholder, so [[SQL INJECTION]] disappeared
+****************************************************************************
+***Version 1.2.2 2011-01-17
+1:add a method to recache all hitis nodes
+	HitisExecuter.ParseHitisFileAsNew();
+2:add a method to recache only one hitis node by hitis's node id
+	HitisExecuter.ReloadHitisNodeByHitisId("HitisId");
+****************************************************************************
+***Version 1.3 2012-03-16
+0:fixed some bugs
+1:in current and future version, there will be no tag: <select/>, <insert/>, <update/>, <delete/>
+	all tags were unified to one tag:<st/>
+2:update the method: Map to Pojo
+	add support for BigDecimal
+3:add a new property for all logic tag:<xxx must="true"/>
+	must which is property of all logic node means:
+	do not check value for nodes:<nu/>, <nn/>
+	value must not null for nodes:<ep/>, <np/>, <eq/>, <ne/>, <le/>, <lt/>, <ge/>, <gt/>
+	value must not null and size of ((List)value) must not greater than 0 for nodes:<ls/>
+4:add new logic tag:
+	<le/>, <ge/>
+5:change all tag name to shorter name, do'not support longer name. more detail to see:
+	short name mapping table
+	----------------------------------------
+	statement -- st
+	notnull		-- nn, null		-- nu
+	notempty	-- np, empty	-- ep
+	notequal	-- ne, equal	-- eq
+	lessequal	-- le, lessthan	-- lt
+	greaterequal-- ge, greater	-- gt
+	list		-- ls
+****************************************************************************
+***Version 1.3.1 2012-06-21
+1:read hitis file by relative path(classpath)
+	in old version, read hitis file by absolute path, so, when use it as jar file, can not read hitis file by absolute path
+    so you must change config for spring, like this:
+	<bean id="hitisFactory" class="org.hitis.HitisFactory" init-method="init">
+		<property name="encoding" value="UTF-8"/>
+		<property name="hitisPackagePath" value="com.manager.hitis"/>
+		<property name="hitisFilePathList">
+			<list>
+				<value>hitis_file_a.txt</value>
+				<value>hitis_file_b.txt</value>
+				<value>hitis_file_c.txt</value>
+			</list>
+		</property>
+	</bean>
+2:init Hitis by java code, like this:
+	List<String> hitisFileNameList = new ArrayList<String>();
+	hitisFileNameList.add("hitis_file_a.txt");
+	hitisFileNameList.add("hitis_file_b.txt");
+	hitisFileNameList.add("hitis_file_c.txt");
+
+	HitisFactory hitisFactory = new HitisFactory();
+	hitisFactory.setEncode("UTF-8");
+	hitisFactory.setHitisPackagePath("/com/manager/hitis/");
+	hitisFactory.setHitisFilePathList(hitisFileNameList);
+	hitisFactory.init();
+3:add two new methods to get both final sql and final parameter Array, so, performances will be better, use the method like this:
+	Map<String, Object> rsMap = HitisExecuter.GetBothAsMap(hitisId, paramMap);
+	String sql = (String)rsMap.get(HitisConstant.RSMAP_KEY_FINALSQL);
+	Object[] params = (Object[]) rsMap.get(HitisConstant.RSMAP_KEY_FINALPARAM);
+	/************* or you can user it like this: *************/
+	Object[] rsAry = HitisExecuter.GetBothAsArray(hitisId, paramMap);
+	String sql = (String)rsAry[0];
+	Object[] params = (Object[])rsAry[1];
+****************************************************************************
+***Version 1.4 2015-08-06
+--:remove the property must="true" of all LogicTag
+--:change some tag name:
+	<st/> to <sql/>
+	<nu/> to <null/>
+	<nn/> to <notnull/>
+	<ep/> to <empty/>
+	<np/> to <notempty/>
+--:add new feature
+	you can edit your hitis.sql like this:
+	<sql id="xxx">
+	select * from xxx where 1 = 1
+	and age = #{age}
+    and email = #{email}
+    </sql>
+    please note, the key and value must not empty in parameter map, or it will throw an RuntimeException.
+--:add new feature
+    about <ls key="ids"/>
+    you can pass an Array or List parameter
+    array example
+    =============
+    paramMap.put("ids", new Integer[]{1,2,3});
+    list example
+    =============
+    List<Integer> idsList = new ArrayList<Integer>();
+    idsList.add(1);
+    idsList.add(2);
+    idsList.add(3);
+    paramMap.put("idsList", idsList);
