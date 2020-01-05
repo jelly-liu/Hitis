@@ -1,7 +1,5 @@
 package org.hitis.node;
 
-import org.hitis.util.HitisUtil;
-
 public class SqlAndValues {
     private String sql;
     private Object[] values;

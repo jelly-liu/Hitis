@@ -20,6 +20,8 @@ import org.hitis.node.NodeFactory;
 
 public class HitisUtil {
 
+
+
 	/**
 	 * @param string 原始字符串
 	 * @param regex 正则表达式
@@ -208,7 +210,7 @@ public class HitisUtil {
 		try{
 			fis = HitisUtil.class.getResourceAsStream(path);
 			if(fis == null){
-				HitisLog.Warning("CAN NOT FIND HITIS FILE:" + path);
+				HitisLog.print("CAN NOT FIND HITIS FILE:" + path);
 			}else{
 				isr = new InputStreamReader(fis, encode);
 				br = new BufferedReader(isr);
@@ -267,7 +269,7 @@ public class HitisUtil {
 	
 	//根据HitisId来重新载入<st id="xxx"/>节点
 	public static void reloadHitisNodeByHitisId(String hitisNodeId){
-		HitisLog.Info("reloadHitisNodeByHitisId:" + hitisNodeId);
+		HitisLog.print("reloadHitisNodeByHitisId:" + hitisNodeId);
 		//重新读取文件
 		String filePath = HitisFile.HitisNodeFileMap.get(hitisNodeId);
 		String fileContent = HitisUtil.readHitisFile(filePath, HitisFactory.encode);
@@ -296,7 +298,7 @@ public class HitisUtil {
 	 */
 	public static void parseHitisFileAsNew(){
 		try{
-			HitisLog.Info("****** START CACHE HITIS NODE ******");
+			HitisLog.print("****** START CACHE HITIS NODE ******");
 			HitisConstant.HitisNodeAbsMap.clear();
 			HitisFile.HitisFileContentMap.clear();
 			HitisFile.HitisNodeFileMap.clear();
@@ -308,7 +310,7 @@ public class HitisUtil {
 			
 			//重新解析所有文件内容并刷新到缓存
 			for(String filePath : HitisFactory.hitisFilePathList){
-				HitisLog.Info("FOUND HITIS FILE:" + filePath);
+				HitisLog.print("FOUND HITIS FILE:" + filePath);
 				String hitisContent = HitisFile.HitisFileContentMap.get(filePath);
 				hitisContent = HitisUtil.replaceAll(hitisContent, "<!--(.|\\s)*?-->", "");//去除所有注释内容
 				Pattern pattern = Pattern.compile(HitisConstant.ALLSecondPattern, Pattern.CASE_INSENSITIVE);
@@ -321,16 +323,16 @@ public class HitisUtil {
 						HitisFile.HitisNodeFileMap.put(nodeId, filePath);
 						HitisConstant.HitisNodeAbsMap.put(nodeId, hitisNode);
 					}else{
-						HitisLog.Warning("SAME HITIS ID WAS FOUNDED:" + nodeId + ", IN FILE:" + filePath);
+						HitisLog.print("SAME HITIS ID WAS FOUNDED:" + nodeId + ", IN FILE:" + filePath);
 					}
 				}
 			}
 			
 			//打印出所有找到的Hitis Id
-			HitisLog.Info("FOUND HITIS ID:[" + HitisUtil.getAllMapKey(HitisConstant.HitisNodeAbsMap) + "]");
-			HitisLog.Info("****** CACHE HITIS NODE SUCCESS ******");
+			HitisLog.print("FOUND HITIS ID:[" + HitisUtil.getAllMapKey(HitisConstant.HitisNodeAbsMap) + "]");
+			HitisLog.print("****** CACHE HITIS NODE SUCCESS ******");
 		}catch(Exception e){
-			HitisLog.Error("(#_#)Failed(#_#)");
+			HitisLog.print("(#_#)Failed(#_#)");
 			e.printStackTrace();
 		}
 	}

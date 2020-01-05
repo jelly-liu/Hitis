@@ -1,5 +1,6 @@
-package org.hitis;
+package org.hitis.test;
 
+import org.hitis.HitisFactory;
 import org.hitis.node.SqlAndValues;
 import org.hitis.util.HitisExecuter;
 import org.hitis.util.HitisLog;
@@ -36,7 +37,7 @@ public class M1Test {
         String sql = sqlAndValues.getSql();
         Object[] params = sqlAndValues.getValues();
 
-        HitisLog.Info("sql as:\n" + sql);
-        HitisLog.Info("parameter as:" + HitisUtil.paramsToString(params));
+        HitisLog.print("sql as:\n" + sql);
+        HitisLog.print("parameter as:" + HitisUtil.paramsToString(params));
     }
 }

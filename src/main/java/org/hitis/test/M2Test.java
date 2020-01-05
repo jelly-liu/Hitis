@@ -1,4 +1,4 @@
-package org.hitis;
+package org.hitis.test;
 
 import org.hitis.util.HitisConstant;
 import org.hitis.util.HitisLog;

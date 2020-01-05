@@ -26,7 +26,7 @@ public class HitisFactory {
 	public void init(){
 		try{
 			if(hitisFilePathList == null || hitisFilePathList.size() == 0){
-				HitisLog.Warning("PLEASE CONFIG HITIS FILE");
+				HitisLog.print("PLEASE CONFIG HITIS FILE");
 				return;
 			}
 			

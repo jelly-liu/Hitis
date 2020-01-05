@@ -64,7 +64,7 @@ public class HitisPojoUtil {
 			hitisPojoAttrMed.getFieldSetterMap().put(fieldName, HitisPojoUtil.GetSetMethod(field, cls));
 		}
 		
-		HitisLog.Info("CACHED NEW POJO'S INFO:" + classFullName);
+		HitisLog.print("CACHED NEW POJO'S INFO:" + classFullName);
 		HitisPojoHelper.PojoInfoMap.put(classFullName, hitisPojoAttrMed);
 	}
 	

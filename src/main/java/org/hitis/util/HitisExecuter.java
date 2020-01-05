@@ -10,7 +10,7 @@ import org.hitis.util.bean.HitisPojoHelper;
 public class HitisExecuter {
 	public static SqlAndValues getSqlAndValues(String hitisId, Map<String, Object> paramMap){
 		if(!HitisConstant.HitisNodeAbsMap.containsKey(hitisId)){
-			HitisLog.Error("找不到相关节点，请检查大小写，hitisId=" + hitisId);
+			HitisLog.print("找不到相关节点，请检查大小写，hitisId=" + hitisId);
 			return null;
 		}
 
